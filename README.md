@@ -1,11 +1,30 @@
 ## Set-Up
 
+Python Version 3.7 was used.
+
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the requirements.
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
-Python Version 3.7 was used.
+
+Set up a virtual environment
+
+```bash
+pip3 install virtualenv
+```
+Specify a path for the Virtual Environment within your workspace
+```bash
+virtualenv env
+```
+Activate in Windows
+```bash
+env\Scripts\activate
+```
+Activate in Linux
+```bash
+source env/bin/activate
+```
 
 ## Usage
 
