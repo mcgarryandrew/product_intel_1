@@ -2,12 +2,6 @@
 
 Python Version 3.7 was used.
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the requirements.
-
-```bash
-pip3 install -r requirements.txt
-```
-
 Set up a virtual environment
 
 ```bash
@@ -26,16 +20,20 @@ Activate in Linux
 source env/bin/activate
 ```
 
-## Usage
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the requirements.
 
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
+```bash
+pip3 install -r requirements.txt
 ```
 
+## Files
+
+```
+main.py
+```
+This file is your entry point into the software. 
+Set your download path which tells [Selenium](https://selenium-python.readthedocs.io/) where to save the 'Popular Products' CSV from Merchant Center.
+Set your final path. This is where the CSV will be moved to once processing is complete
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
