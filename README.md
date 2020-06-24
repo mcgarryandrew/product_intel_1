@@ -72,8 +72,34 @@ This is the file that does most of the work using SQL and Pandas.
 ```
 - Convert currency if required
 - Work out specific metrics and KPIs e.g. Derive ROAS from Cost and Revenue instead of pulling ROAS from the API (if you can).
-- Add week numbers to the data so we can identify which week the specific row of data belongs to. As the data is being looked at weekly, the daily date column was removed for grouping purposes. We mention this in the code's comments.
+- Add week numbers to the data so we can identify which week the specific row of data belongs to. As the data is being looked at ***weekly***, the daily date column was removed effective SQL grouping. We mention this in the code's comments.
 -Write the results to BigQuery
+
+***Several other files are called from match_maker.py***
+
+```
+process_xml.py
+adwords_pull.py
+analytics_pull.py
+adwords_pull
+csv_parser.py
+```
+
+***Process_xml:***
+This file is where the data feed is processed. We use ***urllib*** to get the URL of the live data feed. However, you can eaily pass a local file into the file by changing the line:
+```
+xmldoc = ET.parse(url)
+```
+TO
+```
+xmldoc = ET.parse('dir/to/local/file.csv')
+```
+
+
+
+
+
+
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
