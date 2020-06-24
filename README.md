@@ -94,10 +94,18 @@ TO
 ```
 xmldoc = ET.parse('dir/to/local/file.csv')
 ```
+We have taken namspace into consideration as mentioned in the comments. Namespace may vary depending on the product data feed.
+ 
+The main method takes several optional boolean parameters: **margins**, **decline** and **size**
+These parameters specify which file is calling th method. E.g If the file concerning product margins is calling the method then **margins** will be passed as ***True***
+By default, match_maker.py is assumed to be calling the method if nothing is passed or all parameters are False.
 
+***adwords_pull:***
+Pretty simple file. This just holds the API requests. The **get_raw_report** method is used for everything except the product_decline.py file. Product decline utilises the **ProductDecline** method.
 
+The API responses are passed to ***csv_parser.py*** alongside a parameter **'ANL'** (analytics) or **'ADW'** (Adwords) identifying which API response needs to be processed.
 
-
+You can adjust the metrics being pulled form the API, ***just make sure you refelct these changes in the csv_parser.py file.***
 
 
 
