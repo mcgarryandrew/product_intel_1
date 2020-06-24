@@ -1,5 +1,5 @@
 NOTE: This is development code. There are a lot of efficiency and good practice improvements to be made. Feel free to improve upon it!
-
+NOTE: When refering to functions or methods, we mean the same thing.
 ## Set-Up
 
 Python Version 3.7 was used.
@@ -96,12 +96,16 @@ xmldoc = ET.parse('dir/to/local/file.csv')
 ```
 We have taken namspace into consideration as mentioned in the comments. Namespace may vary depending on the product data feed.
  
-The main method takes several optional boolean parameters: **margins**, **decline** and **size**
-These parameters specify which file is calling th method. E.g If the file concerning product margins is calling the method then **margins** will be passed as ***True***
-By default, match_maker.py is assumed to be calling the method if nothing is passed or all parameters are False.
+The main method takes several optional boolean parameters: **margins**, **decline** and **size**.
+
+These parameters specify which file is calling the function. E.g If the file concerning product margins is calling the method then **margins** will be passed as ***True***.
+
+If nothing is passed or all parameters are False ***match_maker.py*** is assumed to be calling the method by default. 
 
 ***adwords_pull:***
-Pretty simple file. This just holds the API requests. The **get_raw_report** method is used for everything except the product_decline.py file. Product decline utilises the **ProductDecline** method.
+Pretty simple file. This just holds the API requests. The **get_raw_report** method is used for everything except the product_decline.py file. 
+
+Product decline utilises the **ProductDecline** method.
 
 The API responses are passed to ***csv_parser.py*** alongside a parameter **'ANL'** (analytics) or **'ADW'** (Adwords) identifying which API response needs to be processed.
 
