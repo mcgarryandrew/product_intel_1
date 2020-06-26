@@ -81,7 +81,6 @@ This is the file that does most of the work using SQL and Pandas.
 process_xml.py
 adwords_pull.py
 analytics_pull.py
-adwords_pull
 csv_parser.py
 ```
 
@@ -111,12 +110,28 @@ The API responses are passed to ***csv_parser.py*** alongside a parameter **'ANL
 
 You can adjust the metrics being pulled form the API, ***just make sure you refelct these changes in the csv_parser.py file.***
 
+***adwords_pull:***
+This file is similar to adowrds_pull.py. This simply pulls from the Analytics API and processes the response into CSV format.
+
+There are API pulling methods: **get_report** and **get_report_sizes**
+
+The first one is used for all files except the product_sizes.py, which is where get_report_sizes is used. Additionally, these API requests use segements which are completely optional depending on your use case.
 
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+## Product Margins and Product Sizes
+These files are pretty similar. Product margin looks at the sales volume and ROAS of each margin (percentage discount). The data is processed using SQL and passed into BigQuery.
+Product Sizes looks at the sales volume and ROAS for each size of shoe. This processes data in a similar way to product margins, but with a little more SQL.
 
-Please make sure to update tests as appropriate.
+Product sizes require a little string manipulation because of the formatting of some of the sizes - everything needed to be consistent. You can just adjust this accordingly to fit your needs.
+
+## Product Decline
+This file gets it's own section as it works a little bit differently to the others. This looks at the decline of a product over a 4 week period. The rule we used was: ***If the product has more than 400 clicks and has declined more than 50% in the last week (of the 4 week period) vs the first week*** then add it to the list of declining products.
+
+This works by pulling each individual day of the 4 week period from Analytics (to avoid data sampling). Next, we match the Analytics and Adwords data together with some SQL.
+We then loop through the dataframe and make sure each unique product group ID has data for the 4 week period - if not, then remove it from the dataframe. We use this loop to check if the last week of the period has declined more than 50% vs the first week.
+
+Whatever is left in the dataframe are the products that fit the rule mentioned above. These are then sent to BigQuery.
+
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
