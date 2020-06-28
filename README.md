@@ -1,6 +1,18 @@
 NOTE: This is development code. There are a lot of efficiency and good practice improvements to be made. Feel free to improve upon it!
+
 NOTE: When refering to functions or methods, we mean the same thing.
-## Set-Up
+## Getting accounts ready
+Since we will be working with Google Analytics and Goolge Ads APIs, you will need read only permissions and a developer token which you can apply for [here](https://developers.google.com/google-ads/api/docs/first-call/dev-token)
+
+Next, you will need to set up a [service account](https://developers.google.com/identity/protocols/oauth2/service-account) and make sure you add the [BigQuery Scope](https://developers.google.com/identity/protocols/oauth2/scopes#bigquery)
+
+Once this is all set up, you will need to obtain a [refresh token](https://developers.google.com/google-ads/api/docs/first-call/refresh-token) from Google to keep account authentication working over time.
+
+Lastly, you need to fill the env.py and creds.json files with the appropriate information Gooogle supplies you with while creating the Service Account.
+
+Done! Now it's time to look at the code..
+
+## Software Set-Up
 
 Python Version 3.7 was used.
 
@@ -131,6 +143,10 @@ This works by pulling each individual day of the 4 week period from Analytics (t
 We then loop through the dataframe and make sure each unique product group ID has data for the 4 week period - if not, then remove it from the dataframe. We use this loop to check if the last week of the period has declined more than 50% vs the first week.
 
 Whatever is left in the dataframe are the products that fit the rule mentioned above. These are then sent to BigQuery.
+
+## Finishing things up
+Once all the files have been altered to fit your needs and written to BigQuery, you need to add the BigQuery tables as datasources in [DataStudio](https://support.google.com/datastudio/answer/6283323?hl=en).
+
 
 
 ## License
