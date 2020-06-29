@@ -1,7 +1,7 @@
 NOTE: This is development code. There are a lot of efficiency and good practice improvements to be made. Feel free to improve upon it!
 
 NOTE: When refering to functions or methods, we mean the same thing.
-## Getting accounts ready
+## Accounts Set-Up
 Since we will be working with Google Analytics and Goolge Ads APIs, you will need read only permissions and a developer token which you can apply for [here](https://developers.google.com/google-ads/api/docs/first-call/dev-token)
 
 Next, you will need to set up a [service account](https://developers.google.com/identity/protocols/oauth2/service-account) and make sure you add the [BigQuery Scope](https://developers.google.com/identity/protocols/oauth2/scopes#bigquery)
@@ -15,6 +15,9 @@ Done! Now it's time to look at the code..
 ## Software Set-Up
 
 Python Version 3.7 was used.
+
+Rename the ```env.py.default``` file to ```env.py```
+Rename the ```cred.json.default``` file to ```cred.json```
 
 Set up a virtual environment
 
@@ -137,12 +140,63 @@ Product Sizes looks at the sales volume and ROAS for each size of shoe. This pro
 Product sizes require a little string manipulation because of the formatting of some of the sizes - everything needed to be consistent. You can just adjust this accordingly to fit your needs.
 
 ## Product Decline
-This file gets it's own section as it works a little bit differently to the others. This looks at the decline of a product over a 4 week period. The rule we used was: ***If the product has more than 400 clicks and has declined more than 50% in the last week (of the 4 week period) vs the first week*** then add it to the list of declining products.
+This file looks at the decline of a product over a 4 week period. The rule we used was: ***If the product has more than 400 clicks and has declined more than 50% in the last week (of the 4 week period) vs the first week*** then add it to the list of declining products.
 
 This works by pulling each individual day of the 4 week period from Analytics (to avoid data sampling). Next, we match the Analytics and Adwords data together with some SQL.
-We then loop through the dataframe and make sure each unique product group ID has data for the 4 week period - if not, then remove it from the dataframe. We use this loop to check if the last week of the period has declined more than 50% vs the first week.
+We then loop through the dataframe and make sure each unique product group ID has data for the 4 week period - if not, then remove it from the dataframe. We use this loop to check if the **last** week of the period has declined more than 50% vs the **first** week.
 
-Whatever is left in the dataframe are the products that fit the rule mentioned above. These are then sent to BigQuery.
+Once processing is complete, only products that fit the rule above will remain in the dataframe. These are then written to BigQuery.
+
+## Big Query
+There should now be a collection of 6 tables in the BigQuery project. This is the raw data you can use to create your dashbaords!
+We have written a few SQL scripts which we use throughout the [demo dashboard](https://datastudio.google.com/u/1/reporting/1bBekRDZ7-ZRwFWQvOytI1_hw1r49sisA/page/OgDRB)
+
+These can be found in the ***BQSQL*** folder.
+
+You can use this code to create new Views in BigQuery.
+
+***How the code works:***
+```sql
+WITH x AS 
+(
+  SELECT AVG(Pop),ID FROM `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL`  
+  WHERE Pop IN (
+    SELECT MIN(Pop) 
+    FROM `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` 
+    GROUP BY ID,MonthNum,YearNum
+  )
+  GROUP BY ID
+)
+```
+This snippet is using a temp table to uniquely select the highest popularity of a product if it has a duplicate. E.g If the same product (may be the same product but a slightly different style, so it appears as a duplicate since we are using product group IDs) has a popularity of 50 **and** 70, the data would naturally be doubled. Therefore, it's important to make sure each product is unique. This can be done in python, but we prefered to use SQL as to not alter the original data.
+
+```sql
+SELECT
+    `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` .ID as ID, 
+    AVG(Impressions) AS Impressions,
+    AVG(newCost) / 10 AS newCost,
+    ROUND(AVG(Clicks),0) AS Clicks,
+    AVG(ConversionValue) AS ConversionValue,
+    AVG(Clicks) / AVG(Impressions) AS CTR,
+    MAX(IMG) AS IMG, 
+    BRAND,
+    AVG(`YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` .Pop) AS Pop,
+    AVG(CAST(itemRev as float64)) / 10 as itemRev,
+    AVG(CAST(buyToDetailRate AS float64) / 100) as BTDR,
+    AVG(CAST(newROAS AS float64)) as ROAS,
+    productName,
+    country,
+    `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` .MonthNum as Monthum,
+    `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` .YearNum
+FROM
+  `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` 
+INNER JOIN x 
+ON `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` .ID = x.ID
+GROUP BY
+  `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL`.MonthNum,YearNum,ID,BRAND,productName,country
+```
+
+
 
 ## Finishing things up
 Once all the files have been altered to fit your needs and written to BigQuery, you need to add the BigQuery tables as datasources in [DataStudio](https://support.google.com/datastudio/answer/6283323?hl=en).
