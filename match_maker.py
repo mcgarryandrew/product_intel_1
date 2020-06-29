@@ -304,7 +304,7 @@ def main(filePath):
                             credentials=google_auth.getCreds())
 
     #linked table with what they have sold dfFinal
-    dfFinal.to_gbq('DATASET_NAME.TABLE_NAME',
+    dfFinal.to_gbq('DATASET_NAME.TABLE_NAME', #TABLE_NAME here is refered to as CLIENT_DO_SELL in the SQL files
                             project_id='YOUR_PROJECT_ID', 
                             chunksize=None, 
                             if_exists='append', 
