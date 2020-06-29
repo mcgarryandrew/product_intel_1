@@ -1,6 +1,7 @@
 NOTE: This is development code. There are a lot of efficiency and good practice improvements to be made. Feel free to improve upon it!
 
 NOTE: When refering to functions or methods, we mean the same thing.
+
 ## Accounts Set-Up
 Since we will be working with Google Analytics and Goolge Ads APIs, you will need read only permissions and a developer token which you can apply for [here](https://developers.google.com/google-ads/api/docs/first-call/dev-token)
 
@@ -174,14 +175,14 @@ This snippet is using a temp table to uniquely select the highest popularity of 
 SELECT
     `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` .ID as ID, 
     AVG(Impressions) AS Impressions,
-    AVG(newCost) / 10 AS newCost,
+    AVG(newCost) AS newCost,
     ROUND(AVG(Clicks),0) AS Clicks,
     AVG(ConversionValue) AS ConversionValue,
     AVG(Clicks) / AVG(Impressions) AS CTR,
     MAX(IMG) AS IMG, 
     BRAND,
     AVG(`YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` .Pop) AS Pop,
-    AVG(CAST(itemRev as float64)) / 10 as itemRev,
+    AVG(CAST(itemRev as float64)) as itemRev,
     AVG(CAST(buyToDetailRate AS float64) / 100) as BTDR,
     AVG(CAST(newROAS AS float64)) as ROAS,
     productName,
@@ -195,13 +196,37 @@ ON `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL` .ID = x.ID
 GROUP BY
   `YOUR_PROJECT_ID.WL_DASH.CLIENT_DO_SELL`.MonthNum,YearNum,ID,BRAND,productName,country
 ```
+The above code is standard SQL which uses the temp table to Join it's unique data onto the original table. 
 
-
+Use the given code and create your own Views in BigQuery.
 
 ## Finishing things up
-Once all the files have been altered to fit your needs and written to BigQuery, you need to add the BigQuery tables as datasources in [DataStudio](https://support.google.com/datastudio/answer/6283323?hl=en).
+Lastly, you need to add the BigQuery tables and/or views as datasources in [DataStudio](https://support.google.com/datastudio/answer/6283323?hl=en).
+Now you can begin putting charts together!
 
 
+## Deployment
+This project can be deployed anywhere! We looked at AWS EC2, Heroku and a Raspberry Pi. However, you can deploy it to any system as long as you have a [compatible chromedriver](https://chromedriver.chromium.org/downloads) (preferably the latest version). Don't forget to add a cron job to the crontab file or scheduler (for Heroku deployments) if you want to repeat this weekly!
+
+## Scheduling 
+Most deployment methods will be on a Linux based system. 
+
+The below is a simple cron job for running the main.py file every monday morning.
+```bash
+0 4 * * 1 /home/pi/Desktop/product_intel_sns_NOFLASK/sns_flask_app_prods/env/bin/python /home/pi/Desktop/product_intel_sns_NOFLASK/sns_flask_app_prods/main.py >> /home/pi/Desktop/product_intel_sns_NOFLASK/sns_flask_app_prods/output.log 2>&1
+```
+If you plan on deploying to Heroku, you can use the [Advanced Scheduler](https://elements.heroku.com/addons/advanced-scheduler).
+
+## AWS EC2
+This is probably one of the more popular options. You can set up the **micro** instance using the Amazon Linux 2 AMI. Make sure you secure things properly by adding restrictions! Just pull the files once you finish editing and testing. 
+
+## Heroku
+Another fantastic option. A real perk is the clean interface and no need to add the sensitive data into an env file (heroku has their own system for managing this). If you decide to depliy using Heroku, you will need look into using the chromedriver on their system.
+
+## Notable things to improve
+- Reduce the number of API calls. This can be done by making a dedicated file for all API calls and storing the result.
+- Add error catching to API calls. This will avoid timeout errors!
+- Add general error catching and ways to deal with them
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
