@@ -148,7 +148,7 @@ We then loop through the dataframe and make sure each unique product group ID ha
 
 Once processing is complete, only products that fit the rule above will remain in the dataframe. These are then written to BigQuery.
 
-## Big Query
+## BigQuery
 There should now be a collection of 6 tables in the BigQuery project. This is the raw data you can use to create your dashbaords!
 We have written a few SQL scripts which we use throughout the [demo dashboard](https://datastudio.google.com/u/1/reporting/1bBekRDZ7-ZRwFWQvOytI1_hw1r49sisA/page/OgDRB)
 
