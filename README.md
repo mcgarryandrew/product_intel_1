@@ -2,7 +2,7 @@ NOTE: This is development code. There are a lot of efficiency and good practice 
 
 NOTE: When refering to functions or methods, we mean the same thing.
 
-## Accounts Set-Up
+## Account Set-Up
 Since we will be working with Google Analytics and Goolge Ads APIs, you will need read only permissions and a developer token which you can apply for [here](https://developers.google.com/google-ads/api/docs/first-call/dev-token)
 
 Next, you will need to set up a [service account](https://developers.google.com/identity/protocols/oauth2/service-account) and make sure you add the [BigQuery Scope](https://developers.google.com/identity/protocols/oauth2/scopes#bigquery)
