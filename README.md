@@ -1,6 +1,10 @@
 NOTE: This is development code. There are a lot of efficiency and good practice improvements to be made. Feel free to improve upon it!
+NOTE 2: When refering to functions or methods, we mean the same thing.
 
-NOTE: When refering to functions or methods, we mean the same thing.
+## Notable things to improve
+- Reduce the number of API calls. This can be done by making a dedicated file for all API calls and storing the result for reuse.
+- Add error catching to API calls. This will avoid timeout errors!
+- Add general error catching and ways to deal with them
 
 ## Account Set-Up
 Since we will be working with Google Analytics and Goolge Ads APIs, you will need read only permissions and a developer token which you can apply for [here](https://developers.google.com/google-ads/api/docs/first-call/dev-token)
@@ -221,12 +225,8 @@ If you plan on deploying to Heroku, you can use the [Advanced Scheduler](https:/
 This is probably one of the more popular options. You can set up the **micro** instance using the Amazon Linux 2 AMI. Make sure you secure things properly by adding restrictions! Just pull the files once you finish editing and testing. 
 
 ## Heroku
-Another fantastic option. A real perk is the clean interface and no need to add the sensitive data into an env file (heroku has their own system for managing this). If you decide to depliy using Heroku, you will need look into using the chromedriver on their system.
+Another fantastic option. A real perk is the clean interface and no need to add the sensitive data into an env file (heroku has their own system for managing this). If you decide to deploy using Heroku, you will need look into using the chromedriver for their system.
 
-## Notable things to improve
-- Reduce the number of API calls. This can be done by making a dedicated file for all API calls and storing the result.
-- Add error catching to API calls. This will avoid timeout errors!
-- Add general error catching and ways to deal with them
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
