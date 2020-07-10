@@ -225,7 +225,7 @@ If you plan on deploying to Heroku, you can use the [Advanced Scheduler](https:/
 This is probably one of the more popular options. You can set up the **micro** instance using the Amazon Linux 2 AMI. Make sure you secure things properly by adding restrictions! Just pull the files once you finish editing and testing. 
 
 ## Heroku
-Another fantastic option. A real perk is the clean interface and no need to add the sensitive data into an env file (heroku has their own system for managing this). If you decide to deploy using Heroku, you will need look into using the chromedriver for their system.
+Another fantastic option. A real perk is the clean interface and no need to add the sensitive data into an env file (heroku has their own system for managing this). If you decide to deploy using Heroku, you will need look into using the chromedriver for their system. 
 
 
 ## License
